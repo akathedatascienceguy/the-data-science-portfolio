@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 st.set_page_config(
-    page_title="Yash Vardhana Gupta | Senior Data Scientist",
+    page_title="Yash Vardhan Gupta | Founding Data Scientist",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -44,7 +44,7 @@ html, body, [data-testid="stAppViewContainer"] {
 
 [data-testid="stSidebar"] * { color: var(--text) !important; }
 
-.block-container { padding: 2rem 2.5rem !important; max-width: 1400px; }
+.block-container { padding: 2rem 2.5rem 5rem !important; max-width: 1400px; }
 
 /* ── hero ── */
 .hero-wrapper {
@@ -453,17 +453,30 @@ h1, h2, h3, h4 { color: var(--white) !important; }
 # ── DATA ─────────────────────────────────────────────────────────────────────
 
 KPI_DATA = [
-    {"icon": "₹", "value": "12.54 Cr", "label": "Net Delinquency Savings", "sub": "Nov'23 – Aug'25 · SeLMoRe", "accent": "linear-gradient(90deg,#6366f1,#8b5cf6)"},
-    {"icon": "👥", "value": "10M+", "label": "Users Approved", "sub": "₹121.5 Cr Revenue · LTV Model", "accent": "linear-gradient(90deg,#06b6d4,#0891b2)"},
-    {"icon": "🛡️", "value": "~15K", "label": "High-Risk Blocks/Month", "sub": "53% Precision · 5ms Latency", "accent": "linear-gradient(90deg,#10b981,#059669)"},
-    {"icon": "🏅", "value": "9.56", "label": "CGPA – Gold Medalist", "sub": "DTU · Dept. Rank 1 · 2022", "accent": "linear-gradient(90deg,#f59e0b,#d97706)"},
+    {"icon": "🚀", "value": "₹300 Cr", "label": "Personal Loans Target by Dec 2026", "sub": "₹60 Cr/month now · SuperMoney", "accent": "linear-gradient(90deg,#f59e0b,#ef4444)"},
+    {"icon": "₹", "value": "12.54 Cr", "label": "Net Delinquency Savings", "sub": "Nov'23 – Aug'25 · SeLMoRe · Simpl", "accent": "linear-gradient(90deg,#6366f1,#8b5cf6)"},
+    {"icon": "👥", "value": "10M+", "label": "Users Approved", "sub": "₹121.5 Cr Revenue · LTV Model · Simpl", "accent": "linear-gradient(90deg,#06b6d4,#0891b2)"},
+    {"icon": "🏅", "value": "9.56", "label": "CGPA – Gold Medalist", "sub": "DTU · Dept. Rank 1 · 2022", "accent": "linear-gradient(90deg,#10b981,#059669)"},
 ]
 
 WORK_EXP = [
     {
+        "title": "Founding Data Scientist",
+        "company": "SuperMoney, Consumer FinTech",
+        "period": "2025 – PRESENT",
+        "current": True,
+        "bullets": [
+            "Architected the end-to-end ML system for the <b>Personal Loans vertical</b> — completely replacing traditional models and rule-based systems with a modern ML stack, now driving ₹60 Cr/month incremental delta (target: ₹300 Cr/month by Dec 2026).",
+            "Deployed <b>reject inferencing and learning-to-rank (LTR)</b> approaches to surface the best loan offers per user, eliminating confirmation bias and maximising conversion on a cold population.",
+            "Designed the <b>Pay in 3 Charter from scratch</b> — solving the cold-start underwriting problem via unsupervised clustering to segment users without any prior repayment history.",
+            "Building <b>personalisation systems</b> to tailor product surfaces, offer ordering, and credit limits at the individual user level.",
+        ],
+    },
+    {
         "title": "Senior Data Scientist",
         "company": "Simpl, FinTech (BNPL)",
-        "period": "OCT 2023 – PRESENT",
+        "period": "OCT 2023 – 2025",
+        "current": False,
         "bullets": [
             "Built and deployed SeLMoRe — a real-time Stacked LSTM fraud detection system achieving <b>53% precision at 5ms latency</b>, blocking ~15K high-risk users/month and delivering ₹12.54 Cr net delinquency savings over 2+ years.",
             "Developed a novel hybrid sequential-graph LGBM ensemble (HC vectors + GraphSAGE + scorecards), achieving <b>9% precision uplift</b> over baseline; authoring research paper on the methodology.",
@@ -475,6 +488,7 @@ WORK_EXP = [
         "title": "Data Scientist",
         "company": "Simpl, FinTech (BNPL)",
         "period": "MAY 2022 – OCT 2023",
+        "current": False,
         "bullets": [
             "Engineered TU V3 — an enhanced LightGBM credit model integrating TransUnion bureau data, improving ROC-AUC by <b>8%</b>, enabling 2.3M+ bulk approvals.",
             "Drove 200–300 additional daily transaction users with <b>3% lower delinquency</b>, making TU V3 the largest contributor to approvals after baseline models.",
@@ -484,6 +498,7 @@ WORK_EXP = [
         "title": "Data Science Intern",
         "company": "Mercedes-Benz R&D India",
         "period": "JUN 2021 – JAN 2022",
+        "current": False,
         "bullets": [
             "Built a stacked Bi-LSTM for time-to-lane-change and safety distance prediction (<b>F1: 96% / 88%</b>) for automated lane-change assistance POC.",
             "Applied unsupervised multivariate time-series clustering for labeling achieving <b>84% accuracy</b>.",
@@ -577,16 +592,21 @@ def metric_pill(val: str, lbl: str) -> str:
 def render_hero():
     st.markdown("""
     <div class="hero-wrapper">
-        <div class="hero-name">Yash Vardhana Gupta</div>
-        <div class="hero-title">Senior Data Scientist &nbsp;·&nbsp; AI/ML Systems &nbsp;·&nbsp; FinTech</div>
-        <div class="hero-company">⚡ Currently @ Simpl · BNPL FinTech</div>
+        <div class="hero-name">Yash Vardhan Gupta</div>
+        <div class="hero-title">Founding Data Scientist &nbsp;·&nbsp; AI/ML Systems &nbsp;·&nbsp; Consumer FinTech</div>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <div class="hero-company" style="margin-bottom:0">🚀 Currently @ SuperMoney · Consumer FinTech</div>
+            <div class="hero-company" style="margin-bottom:0;background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(6,182,212,0.15));border-color:rgba(16,185,129,0.35);color:#6ee7b7">⚡ Previously @ Simpl · BNPL</div>
+        </div>
         <p class="hero-bio">
-            4+ years designing and deploying production ML & DL systems in FinTech. Specializes in
-            <strong style="color:#a5b4fc">LSTM / Transformer sequence models</strong>,
-            <strong style="color:#67e8f9">Graph Neural Networks</strong>, and
-            <strong style="color:#6ee7b7">ensemble frameworks</strong> for real-time fraud detection,
-            credit underwriting, and user retention. Consistently maintains portfolio delinquency
-            under 1%.
+            5+ years designing and deploying production ML & DL systems in FinTech. Currently founding
+            the data science function at SuperMoney — building personal loans ML from scratch, driving
+            <strong style="color:#fcd34d">₹60 Cr/month</strong> incremental delta (target ₹300 Cr by Dec '26).
+            Specializes in <strong style="color:#a5b4fc">LSTM / Transformer sequence models</strong>,
+            <strong style="color:#67e8f9">Graph Neural Networks</strong>,
+            <strong style="color:#6ee7b7">reject inferencing</strong>, and
+            <strong style="color:#fb923c">learning-to-rank</strong> systems. Consistently maintains portfolio
+            delinquency under 1%.
         </p>
         <div class="contact-row">
             <span class="contact-chip">🎓 DTU Gold Medalist · CGPA 9.56</span>
@@ -617,15 +637,19 @@ def render_experience():
     for i, job in enumerate(WORK_EXP):
         bullets_html = "".join(f"<li>{b}</li>" for b in job["bullets"])
         line_html = '<div class="timeline-line"></div>' if i < len(WORK_EXP) - 1 else ""
+        live_badge = '<span style="display:inline-flex;align-items:center;gap:0.35rem;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;font-weight:700;color:#6ee7b7;margin-left:0.5rem"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;display:inline-block;animation:pulse 1.5s infinite"></span>LIVE</span>' if job.get("current") else ""
+        dot_style = 'style="background:linear-gradient(135deg,#10b981,#06b6d4);box-shadow:0 0 14px rgba(16,185,129,0.6)"' if job.get("current") else ""
+        border_style = 'style="border-color:rgba(16,185,129,0.25)"' if job.get("current") else ""
         st.markdown(f"""
+        <style>@keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:0.4}}}}</style>
         <div class="timeline-item">
             <div style="position:relative">
-                <div class="timeline-dot"></div>
+                <div class="timeline-dot" {dot_style}></div>
                 {line_html}
             </div>
-            <div class="job-card">
+            <div class="job-card" {border_style}>
                 <div class="job-header">
-                    <span class="job-title">{job['title']}</span>
+                    <span class="job-title">{job['title']}{live_badge}</span>
                     <span class="job-period">{job['period']}</span>
                 </div>
                 <div class="job-company">{job['company']}</div>
@@ -972,6 +996,296 @@ Merchant ID · Transaction amounts (log, ratio) · Time-of-day properties · Mer
             st.markdown(html, unsafe_allow_html=True)
 
 
+def render_supermoney():
+    section_header("🚀", "SuperMoney · Founding Data Scientist")
+
+    # headline banner
+    st.markdown(f"""
+    <div style="background:linear-gradient(135deg,#0f1f0f 0%,#0f2a1a 50%,#0a1628 100%);border:1px solid rgba(16,185,129,0.3);border-radius:16px;padding:1.6rem 2rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%);border-radius:50%"></div>
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#10b981;font-weight:700;margin-bottom:0.4rem">FOUNDING DATA SCIENTIST · CURRENT ROLE</div>
+        <div style="font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:0.5rem">Building ML from scratch at SuperMoney</div>
+        <div style="color:#94a3b8;font-size:0.92rem;line-height:1.65;max-width:700px">
+            Zero to one — replacing the entire rule-based + traditional model stack with a modern ML system.
+            Currently at <strong style="color:#fcd34d">₹60 Cr/month incremental delta</strong>, targeting
+            <strong style="color:#6ee7b7">₹300 Cr/month by December 2026</strong>.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # SuperMoney revenue trajectory chart
+    col1, col2 = st.columns([3, 2])
+    with col1:
+        months_sm = ["Launch", "M+2", "M+4", "M+6", "M+8", "M+10", "Dec 2026 Target"]
+        actual = [0, 15, 30, 45, 60, None, None]
+        projected = [None, None, None, 45, 60, 150, 300]
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=months_sm, y=actual,
+            mode="lines+markers",
+            name="Actual (₹ Cr/month)",
+            line=dict(color="#10b981", width=3),
+            marker=dict(size=8, color="#10b981"),
+            connectgaps=False,
+        ))
+        fig.add_trace(go.Scatter(
+            x=months_sm, y=projected,
+            mode="lines+markers",
+            name="Projected (₹ Cr/month)",
+            line=dict(color="#f59e0b", width=2.5, dash="dot"),
+            marker=dict(size=8, color="#f59e0b"),
+            connectgaps=False,
+        ))
+        fig.add_hline(y=300, line=dict(color="rgba(245,158,11,0.3)", width=1, dash="dash"),
+                      annotation_text="₹300 Cr Target", annotation_font_color="#fcd34d",
+                      annotation_position="top right")
+        fig.update_layout(
+            title=dict(text="Personal Loans Incremental Delta — Actual vs Projected", font=dict(color="#e2e8f0", size=13), x=0),
+            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+            legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#94a3b8", size=10)),
+            yaxis=dict(showgrid=True, gridcolor="rgba(30,45,66,0.8)", tickprefix="₹", ticksuffix=" Cr", color="#64748b"),
+            xaxis=dict(showgrid=False, color="#64748b"),
+            font=dict(color="#64748b", family="Inter"),
+            margin=dict(l=0, r=0, t=40, b=0),
+            height=280,
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    with col2:
+        sm_metrics = [
+            ("₹60 Cr", "Incremental Delta/Month"),
+            ("₹300 Cr", "Target by Dec 2026"),
+            ("5x", "Projected Growth"),
+            ("100%", "ML-Replaced Rules"),
+        ]
+        html = '<div style="display:flex;flex-direction:column;gap:0.65rem;padding-top:0.3rem">'
+        for v, l in sm_metrics:
+            html += metric_pill(v, l)
+        html += "</div>"
+        st.markdown(html, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # 3-column project cards
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st.markdown(f"""
+        <div class="proj-card" style="height:100%">
+            <div class="proj-card-header">
+                <div class="proj-icon-box" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(239,68,68,0.2));border:1px solid rgba(245,158,11,0.3)">💳</div>
+                <div>
+                    <div class="proj-name">Personal Loans ML System</div>
+                    <div class="proj-subtitle">End-to-end · Replaced rules + trad models</div>
+                </div>
+            </div>
+            <div style="margin-bottom:0.8rem">
+                {tag("LTR", "amber")} {tag("Reject Inferencing", "cyan")} {tag("LightGBM", "")} {tag("₹60 Cr/mo", "green")}
+            </div>
+            <ul class="job-bullets">
+                <li>Completely replaced traditional scoring models and hard rule-based eligibility systems with a <b>modern ML stack</b></li>
+                <li>Applied <b>Learning to Rank (LTR)</b> to surface optimal loan products per user, maximising conversion and approval quality simultaneously</li>
+                <li><b>Reject inferencing</b> eliminates confirmation bias on the rejected population — exposing the model to the full distribution of loan applicants</li>
+                <li>Incremental delta <b>₹60 Cr/month → ₹300 Cr target</b> by Dec 2026</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c2:
+        st.markdown(f"""
+        <div class="proj-card" style="height:100%">
+            <div class="proj-card-header">
+                <div class="proj-icon-box" style="background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.2));border:1px solid rgba(99,102,241,0.3)">3️⃣</div>
+                <div>
+                    <div class="proj-name">Pay in 3 Charter</div>
+                    <div class="proj-subtitle">Cold Start · Built from scratch</div>
+                </div>
+            </div>
+            <div style="margin-bottom:0.8rem">
+                {tag("Cold Start", "red")} {tag("Unsupervised Clustering", "cyan")} {tag("BNPL", "amber")} {tag("0→1", "green")}
+            </div>
+            <ul class="job-bullets">
+                <li>Designed the complete underwriting charter for a new <b>Pay in 3 product</b> from zero — no historical repayment data, no prior labels</li>
+                <li>Solved cold-start via <b>unsupervised clustering</b>: grouped users by behavioural and demographic signals to create risk segments without ground-truth labels</li>
+                <li>Segments serve as proxy risk tiers for initial credit decisions until supervised signal accumulates for bootstrapping a full supervised model</li>
+                <li>Architecture designed to <b>gracefully transition</b> from cluster-based heuristics → supervised ML as label volume grows</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c3:
+        st.markdown(f"""
+        <div class="proj-card" style="height:100%">
+            <div class="proj-card-header">
+                <div class="proj-icon-box" style="background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(16,185,129,0.2));border:1px solid rgba(6,182,212,0.3)">🎯</div>
+                <div>
+                    <div class="proj-name">Personalisation Systems</div>
+                    <div class="proj-subtitle">Offer ordering · Credit limits · Product surfaces</div>
+                </div>
+            </div>
+            <div style="margin-bottom:0.8rem">
+                {tag("Personalisation", "cyan")} {tag("Ranking", "")} {tag("User Segmentation", "green")}
+            </div>
+            <ul class="job-bullets">
+                <li>Individual-level <b>offer ordering and re-ranking</b> to surface the most relevant loan product per user intent signal</li>
+                <li>Credit limit personalisation using behavioural features — balancing risk appetite with revenue potential</li>
+                <li>Product surface customisation: tailoring what each user sees based on their segment, intent, and risk profile</li>
+                <li>Feeds directly into the LTR scoring pipeline for a <b>unified ranking → personalisation loop</b></li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # LTR deep-dive
+    with st.expander("▸  Learning to Rank (LTR) — Methodology", expanded=False):
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+**Why LTR over a standard binary classifier?**
+
+A binary classifier answers *"approve or not?"*. LTR answers *"given this user, which loan product should we show first to maximise the probability of a good conversion?"* — it optimises the **ordering** of offers, not just a threshold.
+
+**Framework:**
+```
+User signals  ─┐
+Loan features ─┼─► Feature Vector ─► LTR Model ─► Ranked Offer List
+Context       ─┘                         │
+                                  Objective: NDCG / MAP
+```
+
+**Training signal:** Clicks, conversions, and repayment quality are combined into a relevance label. Pairs/listwise objectives (LambdaRank, LambdaMART) directly optimise list quality.
+""")
+        with col2:
+            st.markdown("""
+**Reject Inferencing integration:**
+
+Standard train set = only approved users → **survivor bias**.
+
+```
+All Applicants
+    ├── Approved  ──► Observed label (repaid / defaulted)
+    └── Rejected  ──► No label ← PROBLEM
+                          │
+                    Reject Inferencing
+                          │
+                    Fuzzy labelling /
+                    Autoencoder embeddings /
+                    Parcelling / EM
+                          │
+                    Pseudo-labels for rejected pop
+                          │
+                    Full training set ──► Unbiased model
+```
+
+This is especially critical in personal loans where rejection rates can be 60–70%+, meaning a purely supervised model is trained on a small, unrepresentative slice of the market.
+""")
+
+    with st.expander("▸  Cold-Start Clustering — Pay in 3 Architecture", expanded=False):
+        st.markdown("""
+```
+                   NEW USERS (no repayment history)
+                            │
+            ┌───────────────┼───────────────┐
+            │               │               │
+     Behavioural      Demographic       Bureau Proxy
+      Signals           Signals           Signals
+   (txn velocity,    (age, city,       (CRIF thin file,
+   device price,    income proxy)     enquiry count)
+   app usage)
+            │               │               │
+            └───────────────┴───────────────┘
+                            │
+                   Unsupervised Clustering
+                  (K-Means / DBSCAN / GMM)
+                            │
+                ┌───────────┴───────────┐
+                │           │           │
+           Cluster A    Cluster B   Cluster C
+           (Low Risk)   (Med Risk)  (High Risk)
+                │           │           │
+           High limit   Med limit   Decline / Low limit
+                            │
+                    Monitor repayment signal
+                            │
+                  Enough labels? ──► Bootstrap Supervised Model
+                                     (LightGBM / Logistic)
+                                            │
+                                    Retire clusters, go full ML
+```
+""")
+
+
+def render_blog():
+    section_header("✍️", "Culture × Data Science · Medium Publication")
+
+    st.markdown(f"""
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.8rem;margin-bottom:1.4rem">
+        <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.7rem">
+            <div style="font-size:1.6rem">📝</div>
+            <div>
+                <div style="font-size:1.05rem;font-weight:700;color:#fff">Culture × Data Science</div>
+                <div style="font-size:0.82rem;color:#64748b">Co-founded Medium publication · Exploring data science through real-world lenses</div>
+            </div>
+        </div>
+        <div>{tag("Medium Publication")} {tag("Co-founded", "green")} {tag("4 Articles", "cyan")} {tag("Research Roundtable", "amber")}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    ARTICLES = [
+        {
+            "icon": "🛢️",
+            "title": "Strait of Hormuz — Risk Modelling & Economic Impact",
+            "desc": "Quantitative risk analysis of one of the world's most critical oil chokepoints. Modelled supply-disruption scenarios using historical shipping data, oil flow volumes, and macro-economic multipliers to estimate cascading global economic impact. Framed through a data science lens: uncertainty quantification, scenario trees, and sensitivity analysis.",
+            "tags": [("Risk Modelling", "red"), ("Macro Economics", "amber"), ("Scenario Analysis", "cyan")],
+        },
+        {
+            "icon": "🏛️",
+            "title": "Hampi 3D Reconstruction — Computer Vision Meets Heritage",
+            "desc": "Applied Structure-from-Motion (SfM) and photogrammetric techniques to reconstruct the UNESCO World Heritage site at Hampi in 3D from 2D imagery. Covered point cloud generation, mesh reconstruction, and texture mapping — demonstrating how CV tools can serve cultural preservation.",
+            "tags": [("Computer Vision", ""), ("3D Reconstruction", "cyan"), ("SfM / Photogrammetry", "green")],
+        },
+        {
+            "icon": "🧪",
+            "title": "A/B Testing & Control Sets — The Practitioner's Playbook",
+            "desc": "Deep-dive into the subtleties of A/B testing in production ML systems: SUTVA violations, novelty effects, network interference, control set contamination, and the difference between statistical significance and practical significance. Draws from real reject-inferencing control set design experience at Simpl.",
+            "tags": [("A/B Testing", "green"), ("Causal Inference", "cyan"), ("Control Sets", "amber")],
+        },
+        {
+            "icon": "🩺",
+            "title": "Differential Diagnosis in Data Science",
+            "desc": "Drew a parallel between how doctors differentially diagnose a patient and how data scientists should debug a model — ruling out data leakage, distribution shift, label noise, class imbalance, and calibration failures in a structured, elimination-based framework rather than trial-and-error.",
+            "tags": [("Model Debugging", "red"), ("ML Best Practices", ""), ("Diagnosis Framework", "cyan")],
+        },
+        {
+            "icon": "📊",
+            "title": "From Stethoscopes to PR Curves",
+            "desc": "The debut article of the series — an analogy between clinical precision-recall trade-offs in medicine and the PR curve in machine learning. Explained why ROC-AUC misleads on imbalanced datasets, using a physician's diagnostic decision-making as the intuition pump.",
+            "tags": [("PR Curve", "green"), ("Class Imbalance", "amber"), ("Debut Article", "cyan")],
+        },
+    ]
+
+    for a in ARTICLES:
+        tag_html = " ".join(tag(t, c) for t, c in a["tags"])
+        st.markdown(f"""
+        <div class="ach-card" style="align-items:flex-start;padding:1.2rem 1.4rem;margin-bottom:0.9rem">
+            <div style="font-size:1.8rem;flex-shrink:0;margin-top:0.1rem">{a['icon']}</div>
+            <div>
+                <div class="ach-title" style="font-size:0.97rem;margin-bottom:0.35rem">{a['title']}</div>
+                <div class="ach-desc" style="margin-bottom:0.5rem">{a['desc']}</div>
+                <div>{tag_html}</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown(f"""
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem">
+        <div style="font-size:0.93rem;font-weight:700;color:#fff;margin-bottom:0.25rem">Research Roundtable @ Simpl</div>
+        <div style="font-size:0.82rem;color:#94a3b8">Conducted Simpl's first Research Roundtable on Transformers — covering self-attention, positional encodings, and practical applications of transformer architectures for sequential event modeling in FinTech.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 def render_other_projects():
     section_header("🔬", "Research, Blogs & Other Projects")
 
@@ -1132,6 +1446,29 @@ def render_education():
 def render_impact_chart():
     section_header("📊", "Business Impact Overview")
 
+    # SuperMoney trajectory
+    months_sm = ["Launch", "M+2", "M+4", "M+6", "M+8", "M+10", "Dec 2026"]
+    actual_sm = [0, 15, 30, 45, 60, None, None]
+    proj_sm = [None, None, None, 45, 60, 150, 300]
+
+    fig_sm = go.Figure()
+    fig_sm.add_trace(go.Scatter(x=months_sm, y=actual_sm, mode="lines+markers", name="Actual",
+        line=dict(color="#10b981", width=3), marker=dict(size=9, color="#10b981"), connectgaps=False))
+    fig_sm.add_trace(go.Scatter(x=months_sm, y=proj_sm, mode="lines+markers", name="Projected",
+        line=dict(color="#f59e0b", width=2, dash="dot"), marker=dict(size=9, color="#f59e0b"), connectgaps=False))
+    fig_sm.add_hline(y=300, line=dict(color="rgba(245,158,11,0.3)", dash="dash"),
+                     annotation_text="₹300 Cr Target", annotation_font_color="#fcd34d", annotation_position="top right")
+    fig_sm.update_layout(
+        title=dict(text="SuperMoney · Personal Loans Incremental Delta (₹ Cr/month)", font=dict(color="#e2e8f0", size=13), x=0),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#94a3b8", size=10)),
+        yaxis=dict(showgrid=True, gridcolor="rgba(30,45,66,0.8)", tickprefix="₹", ticksuffix=" Cr", color="#64748b"),
+        xaxis=dict(showgrid=False, color="#64748b"),
+        font=dict(color="#64748b", family="Inter"),
+        margin=dict(l=0, r=0, t=40, b=0), height=250,
+    )
+    st.plotly_chart(fig_sm, use_container_width=True)
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -1183,14 +1520,149 @@ def render_impact_chart():
         st.plotly_chart(fig2, use_container_width=True)
 
 
+def render_ai_butler():
+    section_header("🤖", "GenAI & Agentic AI · Personal Projects")
+
+    # Hero banner
+    st.markdown("""
+    <div style="background:linear-gradient(135deg,#0c0c1a 0%,#16003a 50%,#0a1628 100%);border:1px solid rgba(139,92,246,0.35);border-radius:18px;padding:2rem 2.4rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-50px;right:-50px;width:220px;height:220px;background:radial-gradient(circle,rgba(139,92,246,0.18) 0%,transparent 70%);border-radius:50%"></div>
+        <div style="position:absolute;bottom:-30px;left:20%;width:160px;height:160px;background:radial-gradient(circle,rgba(6,182,212,0.1) 0%,transparent 70%);border-radius:50%"></div>
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#a78bfa;font-weight:700;margin-bottom:0.5rem">PERSONAL PROJECT · AGENTIC AI</div>
+        <div style="font-size:2rem;font-weight:900;background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#67e8f9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.7rem">AI Butler — The Data Science Engine</div>
+        <p style="color:#94a3b8;font-size:0.97rem;line-height:1.75;max-width:800px;margin:0">
+            Imagine hiring a world-class data science team — one that never sleeps, has solved thousands of business problems,
+            and learns from every dataset it touches. Now imagine that entire team living inside a single AI system.
+            <strong style="color:#c4b5fd">That's AI Butler.</strong>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns([3, 2])
+
+    with col1:
+        st.markdown(f"""
+        <div class="proj-card">
+            <div class="proj-card-header">
+                <div class="proj-icon-box" style="background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(6,182,212,0.25));border:1px solid rgba(139,92,246,0.4);font-size:1.5rem">🧠</div>
+                <div>
+                    <div class="proj-name">What makes AI Butler different</div>
+                    <div class="proj-subtitle">Beyond RAG & context layers — fine-tuned + specialised systems</div>
+                </div>
+            </div>
+            <div style="margin-bottom:0.9rem">
+                {tag("Fine-tuning", "cyan")} {tag("Knowledge Graph", "")} {tag("Agentic", "amber")} {tag("LangChain / LlamaIndex", "green")} {tag("RAG+", "red")}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+While most teams stop at building **knowledge bases and context graphs** to augment models like Claude or Gemini, AI Butler goes further along three simultaneous tracks:
+
+| Track | What | Why Better |
+|---|---|---|
+| **KB + Context Graph** | Structured DS knowledge, indexed problem→solution pairs | Fast retrieval of relevant prior art |
+| **Fine-tuned Models** | Domain-specific fine-tuning on DS reasoning chains | Better judgment than generic LLM on DS tasks |
+| **Specialised Systems** | End-to-end tooling for data exploration, modelling, evaluation | Full-stack, not just a prompt wrapper |
+
+The combination creates a system that doesn't just answer DS questions — it **executes** data science.
+""")
+
+    with col2:
+        # Architecture diagram-style pillars
+        pillars = [
+            ("📚", "Knowledge Base", "Curated DS problem-solution pairs, papers, competition insights", "#6366f1"),
+            ("🕸️", "Context Graph", "Connects concepts, methods, datasets, and failure modes", "#06b6d4"),
+            ("🎯", "Fine-tuned LLM", "Trained on DS reasoning chains for superior domain judgment", "#8b5cf6"),
+            ("⚙️", "DS Engine", "Automated EDA → Feature Eng → Model Selection → Eval loop", "#10b981"),
+        ]
+        for icon, title, desc, color in pillars:
+            st.markdown(f"""
+            <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid {color};border-radius:10px;padding:0.8rem 1rem;margin-bottom:0.6rem">
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem">
+                    <span style="font-size:1rem">{icon}</span>
+                    <span style="font-size:0.88rem;font-weight:700;color:#fff">{title}</span>
+                </div>
+                <div style="font-size:0.78rem;color:#64748b;line-height:1.5">{desc}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    with st.expander("▸  Data Science Engine — Competition & Reasoning Mode", expanded=False):
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+**DS Competition Engine**
+
+Designed to compete in and solve complex data science competitions autonomously:
+
+```
+Problem Statement
+      │
+  EDA Agent ──► Data profiling, anomaly detection,
+                distribution analysis
+      │
+Feature Engineering Agent ──► Domain-aware transforms,
+                               embeddings, interactions
+      │
+  Model Selection Agent ──► Benchmarks across clf/reg/
+                             seq/graph paradigms
+      │
+  Experiment Tracker ──► Optuna / hyperopt, CV strategy
+      │
+  Ensemble Agent ──► Stacking, blending, OOF scoring
+      │
+  Submission Agent ──► Format validation, leaderboard tracking
+```
+""")
+        with col2:
+            st.markdown("""
+**DS GPT — Reasoning Mode**
+
+Reasons through end-to-end modelling decisions like a senior practitioner:
+
+- **Dataset intake:** Infers schema, dtypes, cardinality, target leakage automatically
+- **Modelling choices:** Selects paradigm (tabular ML, sequence, graph) based on data shape
+- **Experimentation workflow:** Proposes experiments, evaluates, feeds back into reasoning loop
+- **Failure diagnosis:** Identifies distribution shift, label noise, calibration errors using differential-diagnosis framework
+- **Research integration:** Surfaces relevant papers and competition solutions from the knowledge graph
+
+> Fine-tuned specifically on data science reasoning chains — not generic instruction following. The goal: a model that *thinks* like a senior DS, not one that paraphrases Wikipedia.
+""")
+
+    with st.expander("▸  Technical Stack", expanded=False):
+        st.markdown("""
+```
+┌───────────────────────────────────────────────────────────────────┐
+│                        AI Butler Stack                            │
+├───────────────┬───────────────────────┬───────────────────────────┤
+│  KNOWLEDGE    │    ORCHESTRATION      │    SPECIALISED MODELS     │
+│               │                       │                           │
+│  ChromaDB     │  LangChain / Llama    │  Fine-tuned LLM           │
+│  Pinecone     │  Index               │  (DS reasoning chains)    │
+│               │  Multi-agent routing  │                           │
+│  Propositionizer│  Tool-use / function│  Sentence Transformers    │
+│  chunking     │  calling agents      │  (embedding layer)        │
+│               │                       │                           │
+│  Context Graph│  ReAct / CoT loops   │  Cross-encoder reranker   │
+│  (entities,   │  Memory management   │  (Top-k → rerank)         │
+│   relations)  │                       │                           │
+├───────────────┴───────────────────────┴───────────────────────────┤
+│                       RETRIEVAL PIPELINE                          │
+│  Query → Embedding → ANN Search (LSH/HNSW) → Top-k →             │
+│  Cross-encoder Rerank → Context injection → LLM generation        │
+└───────────────────────────────────────────────────────────────────┘
+```
+""")
+
+
 # ── SIDEBAR ──────────────────────────────────────────────────────────────────
 
 def render_sidebar():
     with st.sidebar:
         st.markdown("""
         <div style="padding:1rem 0 0.5rem">
-            <div style="font-size:1.1rem;font-weight:800;color:#e2e8f0">Yash Vardhana Gupta</div>
-            <div style="font-size:0.8rem;color:#64748b;margin-top:0.2rem">Senior Data Scientist</div>
+            <div style="font-size:1.1rem;font-weight:800;color:#e2e8f0">Yash Vardhan Gupta</div>
+            <div style="font-size:0.8rem;color:#10b981;margin-top:0.2rem;font-weight:600">Founding Data Scientist · SuperMoney</div>
         </div>
         <hr style="border-color:#1e2d42;margin:0.8rem 0">
         """, unsafe_allow_html=True)
@@ -1199,18 +1671,30 @@ def render_sidebar():
             "🏠  Overview": "overview",
             "💼  Experience": "experience",
             "📊  Impact Charts": "impact",
+            "─── SuperMoney ───": "divider",
+            "🚀  SuperMoney Projects": "supermoney",
+            "─── Simpl ───": "divider",
             "🛡️  SeLMoRe (Antifraud)": "selmore",
             "🕸️  Ensemble Model": "ensemble",
             "📈  Underwriting Systems": "underwriting",
+            "─── Personal & Research ───": "divider",
+            "🤖  AI Butler (GenAI)": "ai_butler",
+            "✍️  Culture × DS Blog": "blog",
             "🔬  Research & Projects": "research",
+            "─── Profile ───": "divider",
             "⚙️  Skills": "skills",
             "🎓  Education": "education",
             "🏆  Achievements": "achievements",
         }
 
+        nav_keys = [k for k in pages if pages[k] != "divider"]
+        for k in pages:
+            if pages[k] == "divider":
+                st.markdown(f'<div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:#334155;font-weight:700;padding:0.6rem 0 0.2rem">{k.strip("─ ")}</div>', unsafe_allow_html=True)
+
         selected = st.radio(
             "Navigate",
-            list(pages.keys()),
+            nav_keys,
             label_visibility="collapsed",
         )
 
@@ -1224,7 +1708,7 @@ def render_sidebar():
         </div>
         <hr style="border-color:#1e2d42;margin:0.8rem 0">
         <div style="font-size:0.72rem;color:#475569">
-            © 2025 · Built with Streamlit
+            © 2026 · Built with Streamlit
         </div>
         """, unsafe_allow_html=True)
 
@@ -1250,6 +1734,9 @@ def main():
         render_kpis()
         render_impact_chart()
 
+    elif page == "supermoney":
+        render_supermoney()
+
     elif page == "selmore":
         render_selmore()
 
@@ -1258,6 +1745,12 @@ def main():
 
     elif page == "underwriting":
         render_underwriting()
+
+    elif page == "ai_butler":
+        render_ai_butler()
+
+    elif page == "blog":
+        render_blog()
 
     elif page == "research":
         render_other_projects()
