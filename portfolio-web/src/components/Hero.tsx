@@ -1,160 +1,195 @@
 'use client'
-
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowDown, MapPin, Mail } from 'lucide-react'
 import { profile } from '@/data/portfolio'
 
-const floatVariants = {
-  hidden:  { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { delay: 0.15 * i, duration: 0.6, ease: 'easeOut' },
-  }),
+/* ── animated data constellation ── */
+function Constellation() {
+  const ref = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = ref.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => {
+      canvas.width  = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const N = 80, CONNECT = 140
+    const pts = Array.from({ length: N }, () => ({
+      x:  Math.random() * canvas.width,
+      y:  Math.random() * canvas.height,
+      r:  Math.random() * 1.6 + 0.3,
+      vx: (Math.random() - 0.5) * 0.16,
+      vy: (Math.random() - 0.5) * 0.16,
+      a:  Math.random() * 0.28 + 0.06,
+    }))
+
+    let raf: number
+    const tick = () => {
+      const { width, height } = canvas
+      ctx.clearRect(0, 0, width, height)
+
+      pts.forEach(p => {
+        p.x += p.vx; p.y += p.vy
+        if (p.x < 0 || p.x > width)  p.vx *= -1
+        if (p.y < 0 || p.y > height) p.vy *= -1
+      })
+
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x
+          const dy = pts[i].y - pts[j].y
+          const d  = Math.sqrt(dx * dx + dy * dy)
+          if (d < CONNECT) {
+            ctx.beginPath()
+            ctx.strokeStyle = `rgba(255,255,255,${0.055 * (1 - d / CONNECT)})`
+            ctx.lineWidth = 0.5
+            ctx.moveTo(pts[i].x, pts[i].y)
+            ctx.lineTo(pts[j].x, pts[j].y)
+            ctx.stroke()
+          }
+        }
+      }
+
+      pts.forEach(p => {
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255,255,255,${p.a})`
+        ctx.fill()
+      })
+
+      raf = requestAnimationFrame(tick)
+    }
+    tick()
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  return <canvas ref={ref} className="absolute inset-0 w-full h-full" />
 }
 
-const stats = [
-  { val: '₹300 Cr', lbl: 'Target by Dec \'26', color: 'from-amber-500/20 to-orange-500/20 border-amber-500/20' },
-  { val: '10M+',    lbl: 'Users Approved',      color: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/20' },
-  { val: '53%',     lbl: 'Fraud Precision',      color: 'from-indigo-500/20 to-violet-500/20 border-indigo-500/20' },
-  { val: '5ms',     lbl: 'Model Latency P90',    color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/20' },
-]
+/* word-level stagger — prevents mid-word line breaks */
+const container = {
+  hidden:  {},
+  visible: { transition: { staggerChildren: 0.14 } },
+}
+const wordAnim = {
+  hidden:  { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } },
+}
 
 export default function Hero() {
-  const scrollDown = () => {
-    const el = document.getElementById('experience')
-    el?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const words = profile.name.split(' ')
 
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center bg-grid overflow-hidden"
-    >
-      {/* ambient orbs */}
-      <div className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute w-[600px] h-[600px] rounded-full opacity-100 animate-float-slow"
-          style={{
-            top: '-120px', right: '-80px',
-            background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
-          }}
-        />
-        <div
-          className="absolute w-[500px] h-[500px] rounded-full opacity-100 animate-float-med"
-          style={{
-            bottom: '-80px', left: '5%',
-            background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)',
-            animationDelay: '3s',
-          }}
-        />
-        <div
-          className="absolute w-[360px] h-[360px] rounded-full"
-          style={{
-            top: '40%', left: '50%',
-            background: 'radial-gradient(circle, rgba(16,185,129,0.05) 0%, transparent 70%)',
-          }}
-        />
-      </div>
+    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      <Constellation />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
-        {/* company badges */}
+      {/* vignette */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.72) 100%)' }}
+      />
+
+      <div className="relative z-10 max-w-5xl w-full mx-auto px-8 text-center">
+
+        {/* eyebrow */}
         <motion.div
-          custom={0} variants={floatVariants} initial="hidden" animate="visible"
-          className="flex items-center justify-center gap-3 flex-wrap mb-8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="eyebrow mb-8 flex items-center justify-center gap-3"
         >
-          <span className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-sm font-semibold">
-            <span className="live-dot" />
-            Founding DS @ SuperMoney
-          </span>
-          <span className="px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-sm font-semibold">
-            Previously @ Simpl · BNPL
-          </span>
+          <span className="live-dot" />
+          <span>Founding Data Scientist &nbsp;·&nbsp; SuperMoney &nbsp;·&nbsp; New Delhi</span>
         </motion.div>
 
-        {/* name */}
+        {/* name — word by word, never breaks mid-word */}
         <motion.h1
-          custom={1} variants={floatVariants} initial="hidden" animate="visible"
-          className="text-6xl sm:text-7xl md:text-8xl font-black leading-none mb-4"
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="font-light tracking-tight text-apple leading-[1.1] mb-8 select-none"
+          style={{ fontSize: 'clamp(2.6rem, 6.5vw, 5.8rem)' }}
         >
-          <span className="gradient-text">{profile.name}</span>
+          {words.map((w, i) => (
+            <motion.span
+              key={i}
+              variants={wordAnim}
+              style={{
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                marginRight: i < words.length - 1 ? '0.28em' : 0,
+              }}
+            >
+              {w}
+            </motion.span>
+          ))}
         </motion.h1>
 
-        {/* title */}
-        <motion.p
-          custom={2} variants={floatVariants} initial="hidden" animate="visible"
-          className="text-xl sm:text-2xl text-slate-400 font-medium mb-6 tracking-wide"
-        >
-          {profile.title} &nbsp;·&nbsp; AI/ML Systems &nbsp;·&nbsp; FinTech
-        </motion.p>
+        {/* rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+          className="h-px bg-white/10 max-w-sm mx-auto mb-8 origin-center"
+        />
 
         {/* bio */}
         <motion.p
-          custom={3} variants={floatVariants} initial="hidden" animate="visible"
-          className="max-w-2xl mx-auto text-slate-400 text-base sm:text-lg leading-relaxed mb-8"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.2 }}
+          className="text-g-300 text-base sm:text-lg font-light max-w-xl mx-auto leading-relaxed mb-10"
         >
-          5+ years deploying production ML in FinTech. Building personal loans ML from scratch at SuperMoney —
-          &nbsp;<span className="text-amber-400 font-semibold">₹60 Cr/month</span>&nbsp; incremental delta,
-          targeting&nbsp;<span className="text-emerald-400 font-semibold">₹300 Cr by Dec 2026</span>.
+          Building ML systems that replaced rules with intelligence —&nbsp;
+          <span className="text-apple font-normal">&#8377;60&nbsp;Cr/month</span> and growing.
         </motion.p>
 
-        {/* meta chips */}
+        {/* CTAs */}
         <motion.div
-          custom={4} variants={floatVariants} initial="hidden" animate="visible"
-          className="flex items-center justify-center gap-4 flex-wrap mb-10 text-sm text-slate-500"
-        >
-          <span className="flex items-center gap-1.5"><MapPin size={14} /> {profile.location}</span>
-          <span className="flex items-center gap-1.5"><Mail size={14} /> {profile.email}</span>
-          <span className="px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-semibold text-xs">
-            DTU Gold Medalist · 9.56 CGPA
-          </span>
-        </motion.div>
-
-        {/* CTA buttons */}
-        <motion.div
-          custom={5} variants={floatVariants} initial="hidden" animate="visible"
-          className="flex items-center justify-center gap-4 flex-wrap mb-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.5 }}
+          className="flex items-center justify-center gap-8"
         >
           <button
-            onClick={scrollDown}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-semibold text-sm hover:opacity-90 transition-opacity shadow-glow-indigo"
+            onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })}
+            className="font-mono text-xs text-g-400 hover:text-apple uppercase tracking-widest2 transition-colors"
           >
-            View Work
+            view work &#8595;
           </button>
+          <span className="text-g-700 font-mono text-xs select-none">&#183;</span>
           <a
             href="mailto:yvg1799@gmail.com"
-            className="px-6 py-3 rounded-xl glass text-slate-300 font-semibold text-sm hover:text-white hover:border-white/20 transition-colors"
+            className="font-mono text-xs text-g-400 hover:text-apple uppercase tracking-widest2 transition-colors"
           >
-            Get in touch
+            yvg1799@gmail.com
           </a>
-        </motion.div>
-
-        {/* stat cards */}
-        <motion.div
-          custom={6} variants={floatVariants} initial="hidden" animate="visible"
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto"
-        >
-          {stats.map((s) => (
-            <div
-              key={s.lbl}
-              className={`glass glass-hover rounded-2xl p-4 bg-gradient-to-br ${s.color}`}
-            >
-              <div className="text-xl font-black text-white mb-1">{s.val}</div>
-              <div className="text-xs text-slate-400 font-medium leading-tight">{s.lbl}</div>
-            </div>
-          ))}
         </motion.div>
       </div>
 
-      {/* scroll cue */}
-      <motion.button
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
-        onClick={scrollDown}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-600 hover:text-slate-400 transition-colors"
+      {/* scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.0, duration: 0.6 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
       >
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2 }}>
-          <ArrowDown size={20} />
-        </motion.div>
-      </motion.button>
+        <motion.div
+          animate={{ y: [0, 7, 0] }}
+          transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
+          className="w-px h-10 bg-gradient-to-b from-transparent to-white/15 mx-auto"
+        />
+      </motion.div>
     </section>
   )
 }

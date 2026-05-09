@@ -1,265 +1,220 @@
 'use client'
-
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import {
-  AreaChart, Area, LineChart, Line,
-  XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer,
-} from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { ChevronDown } from 'lucide-react'
 import { supermoneyTrajectory } from '@/data/portfolio'
 
-const projects = [
-  {
-    icon: '💳',
-    title: 'Personal Loans ML System',
-    subtitle: 'End-to-end · Replaced rules + trad models',
-    accent: 'from-amber-500/20 to-orange-500/20',
-    border: 'border-amber-500/20',
-    tags: [['LTR', 'amber'], ['Reject Inferencing', 'cyan'], ['LightGBM', ''], ['₹60 Cr/mo', 'green']] as [string,string][],
-    bullets: [
-      'Completely replaced traditional scoring models and hard rule-based eligibility with a modern ML stack',
-      'Learning-to-Rank (LTR) surfaces optimal loan products per user — maximises conversion and approval quality simultaneously',
-      'Reject inferencing eliminates confirmation bias on the rejected population, exposing the model to the full applicant distribution',
-      'Incremental delta ₹60 Cr/month → ₹300 Cr target by Dec 2026',
-    ],
-  },
-  {
-    icon: '3️⃣',
-    title: 'Pay in 3 Charter',
-    subtitle: 'Cold Start · Built from scratch',
-    accent: 'from-indigo-500/20 to-violet-500/20',
-    border: 'border-indigo-500/20',
-    tags: [['Cold Start', 'red'], ['Unsupervised Clustering', 'cyan'], ['BNPL', 'amber'], ['0→1', 'green']] as [string,string][],
-    bullets: [
-      'Designed the complete underwriting charter for a new Pay in 3 product from zero — no historical repayment data, no prior labels',
-      'Solved cold-start via unsupervised clustering: grouped users by behavioural and demographic signals to create risk segments',
-      'Segments serve as proxy risk tiers for initial credit decisions until supervised signal accumulates',
-      'Architecture transitions gracefully from cluster-based heuristics → supervised ML as label volume grows',
-    ],
-  },
-  {
-    icon: '🎯',
-    title: 'Personalisation Systems',
-    subtitle: 'Offer ordering · Credit limits · Product surfaces',
-    accent: 'from-cyan-500/20 to-teal-500/20',
-    border: 'border-cyan-500/20',
-    tags: [['Personalisation', 'cyan'], ['Ranking', ''], ['User Segmentation', 'green']] as [string,string][],
-    bullets: [
-      'Individual-level offer ordering and re-ranking to surface the most relevant loan product per user intent signal',
-      'Credit limit personalisation using behavioural features — balancing risk appetite with revenue potential',
-      'Product surface customisation: tailoring what each user sees based on segment, intent, and risk profile',
-      'Feeds directly into the LTR scoring pipeline for a unified ranking → personalisation loop',
-    ],
-  },
-]
-
-function Tag({ label, color }: { label: string; color: string }) {
-  const cls = color ? `tag tag-${color}` : 'tag'
-  return <span className={cls}>{label}</span>
+function Tag({ label }: { label: string }) {
+  return <span className="tag">{label}</span>
 }
 
-function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number; name: string }[]; label?: string }) {
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  return (
+    <motion.div ref={ref} initial={{ opacity: 0, y: 16 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay, duration: 0.5, ease: 'easeOut' }}>
+      {children}
+    </motion.div>
+  )
+}
+
+const Tip = ({ active, payload, label }: { active?: boolean; payload?: { value: number; name: string }[]; label?: string }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="custom-tooltip">
-      <div className="font-semibold mb-1">{label}</div>
-      {payload.map(p => (
-        <div key={p.name} style={{ color: p.name === 'actual' ? '#10b981' : '#f59e0b' }}>
-          {p.name === 'actual' ? 'Actual' : 'Projected'}: ₹{p.value} Cr
-        </div>
+    <div className="chart-tooltip">
+      <div className="text-g-400 mb-1">{label}</div>
+      {payload.map(p => p.value != null && (
+        <div key={p.name} className="text-apple">{p.name === 'actual' ? 'Actual' : 'Projected'}: ₹{p.value} Cr</div>
       ))}
     </div>
   )
 }
 
+const projects = [
+  {
+    num: '01', title: 'Personal Loans ML',
+    tags: ['Learning to Rank', 'Reject Inferencing', 'LightGBM'],
+    bullets: [
+      'Replaced all traditional models and rule-based eligibility with a unified ML stack end-to-end',
+      'LTR optimises offer ordering per user — maximising good conversion simultaneously with approval quality',
+      'Reject inferencing exposes the model to the full applicant distribution, eliminating survivor bias',
+    ],
+  },
+  {
+    num: '02', title: 'Pay in 3 Charter',
+    tags: ['Cold Start', 'Unsupervised Clustering', 'BNPL'],
+    bullets: [
+      'Designed entire underwriting charter from zero — no historical repayment labels, no prior signal',
+      'Unsupervised clustering creates risk segments from behavioural + demographic + bureau proxy signals',
+      'Architecture transitions gracefully to supervised ML as label volume accumulates',
+    ],
+  },
+  {
+    num: '03', title: 'Personalisation',
+    tags: ['Offer Ranking', 'Credit Limits', 'User Segmentation'],
+    bullets: [
+      'Individual-level offer ordering and re-ranking per user intent and risk profile',
+      'Credit limit personalisation balancing risk appetite with revenue potential at user level',
+      'Unified ranking → personalisation feedback loop via the LTR scoring pipeline',
+    ],
+  },
+]
+
 export default function SuperMoney() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
-  const [expanded, setExpanded] = useState<string | null>(null)
-
-  const toggle = (t: string) => setExpanded(e => e === t ? null : t)
+  const [open, setOpen] = useState<string | null>(null)
+  const toggle = (t: string) => setOpen(e => e === t ? null : t)
 
   return (
-    <section id="supermoney" className="max-w-7xl mx-auto px-6 py-24">
+    <section id="supermoney" className="max-w-6xl mx-auto px-8 py-24">
       <div ref={ref}>
-        {/* header banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="relative rounded-3xl overflow-hidden mb-12 p-8 sm:p-12"
-          style={{
-            background: 'linear-gradient(135deg, #0f2010 0%, #0a1f14 50%, #0a1628 100%)',
-            border: '1px solid rgba(16,185,129,0.2)',
-            boxShadow: '0 0 60px rgba(16,185,129,0.08)',
-          }}
-        >
-          <div className="pointer-events-none absolute top-0 right-0 w-80 h-80"
-            style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)' }} />
 
-          <div className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2 flex items-center gap-2">
-            <span className="live-dot" /> Founding Data Scientist · Current Role
+        {/* header */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}>
+          <div className="flex items-baseline gap-4 mb-4">
+            <span className="font-mono text-[0.62rem] text-g-600 tracking-widest2 uppercase">01</span>
+            <h2 className="text-3xl font-light text-apple tracking-tight">SuperMoney</h2>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
-            Building ML from scratch at&nbsp;
-            <span className="gradient-text-green">SuperMoney</span>
-          </h2>
-          <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl mb-6">
-            Zero to one — replacing the entire rule-based + traditional model stack with a modern ML system.
-            Currently at&nbsp;
-            <strong className="text-amber-400">₹60 Cr/month incremental delta</strong>, targeting&nbsp;
-            <strong className="text-emerald-400">₹300 Cr/month by December 2026</strong>.
+          <p className="font-mono text-xs text-g-500 uppercase tracking-widest2 mb-12">
+            Founding Data Scientist · 2025 – Present
           </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
-            {[
-              ['₹60 Cr', 'Current/Month'],
-              ['₹300 Cr', 'Target Dec 2026'],
-              ['5×', 'Projected Growth'],
-              ['100%', 'ML-Replaced Rules'],
-            ].map(([v, l]) => (
-              <div key={l} className="bg-white/[0.04] border border-white/[0.07] rounded-xl p-3 text-center">
-                <div className="text-lg font-black text-white">{v}</div>
-                <div className="text-xs text-slate-500 font-medium">{l}</div>
-              </div>
-            ))}
-          </div>
         </motion.div>
+
+        {/* big stat */}
+        <Reveal delay={0.1}>
+          <div className="border border-white/[0.07] p-10 mb-12 grid sm:grid-cols-2 gap-8">
+            <div>
+              <div className="font-mono text-[0.62rem] text-g-600 uppercase tracking-widest2 mb-3">Current Delta</div>
+              <div className="font-mono text-6xl font-light text-apple tracking-tight mb-1">₹60 Cr<span className="text-g-500 text-2xl">/mo</span></div>
+              <div className="font-mono text-xs text-g-500">Incremental · Personal Loans ML</div>
+            </div>
+            <div className="flex flex-col justify-center sm:border-l border-white/[0.07] sm:pl-8">
+              <div className="font-mono text-[0.62rem] text-g-600 uppercase tracking-widest2 mb-3">Target · Dec 2026</div>
+              <div className="font-mono text-6xl font-light text-apple tracking-tight mb-1">₹300 Cr<span className="text-g-500 text-2xl">/mo</span></div>
+              <div className="font-mono text-xs text-g-500">5× projected growth</div>
+            </div>
+          </div>
+        </Reveal>
 
         {/* chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="glass rounded-2xl p-6 mb-10"
-        >
-          <h3 className="text-white font-semibold mb-4">Personal Loans Incremental Delta — Actual vs Projected (₹ Cr/month)</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={supermoneyTrajectory}>
-              <defs>
-                <linearGradient id="actualGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%"  stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.02} />
-                </linearGradient>
-                <linearGradient id="projGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%"  stopColor="#f59e0b" stopOpacity={0.25} />
-                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.02} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false}
-                tickFormatter={v => `₹${v}`} />
-              <Tooltip content={<CustomTooltip />} />
-              <Area type="monotone" dataKey="actual"    stroke="#10b981" strokeWidth={2.5} fill="url(#actualGrad)" connectNulls={false} name="actual" dot={{ r: 4, fill: '#10b981' }} />
-              <Area type="monotone" dataKey="projected" stroke="#f59e0b" strokeWidth={2} strokeDasharray="6 4" fill="url(#projGrad)" connectNulls={false} name="projected" dot={{ r: 4, fill: '#f59e0b' }} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </motion.div>
+        <Reveal delay={0.2}>
+          <div className="mb-12">
+            <div className="font-mono text-[0.62rem] text-g-600 uppercase tracking-widest2 mb-6">
+              Trajectory — Actual vs Projected (₹ Cr/month)
+            </div>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={supermoneyTrajectory}>
+                <CartesianGrid strokeDasharray="2 4" />
+                <XAxis dataKey="month" />
+                <YAxis tickFormatter={v => `₹${v}`} />
+                <Tooltip content={<Tip />} />
+                <Line type="monotone" dataKey="actual" stroke="#f5f5f7" strokeWidth={1.5}
+                  dot={{ r: 3, fill: '#f5f5f7', strokeWidth: 0 }} connectNulls={false} name="actual" />
+                <Line type="monotone" dataKey="projected" stroke="#636366" strokeWidth={1} strokeDasharray="4 4"
+                  dot={{ r: 3, fill: '#636366', strokeWidth: 0 }} connectNulls={false} name="projected" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </Reveal>
 
-        {/* project cards */}
-        <div className="grid md:grid-cols-3 gap-5 mb-8">
+        {/* projects */}
+        <div className="grid md:grid-cols-3 gap-px bg-white/[0.06] mb-12">
           {projects.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-              className={`glass glass-hover rounded-2xl p-6 bg-gradient-to-br ${p.accent} border ${p.border}`}
-            >
-              <div className="text-3xl mb-3">{p.icon}</div>
-              <h3 className="text-white font-bold text-lg mb-1">{p.title}</h3>
-              <p className="text-slate-500 text-xs mb-3">{p.subtitle}</p>
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {p.tags.map(([l, c]) => <Tag key={l} label={l} color={c} />)}
+            <Reveal key={p.num} delay={0.1 + i * 0.08}>
+              <div className="bg-black p-7 h-full">
+                <div className="font-mono text-[0.6rem] text-g-600 mb-4">{p.num}</div>
+                <div className="text-apple font-medium mb-3">{p.title}</div>
+                <div className="flex flex-wrap gap-1.5 mb-5">
+                  {p.tags.map(t => <Tag key={t} label={t} />)}
+                </div>
+                <ul className="space-y-2.5">
+                  {p.bullets.map((b, bi) => (
+                    <li key={bi} className="flex gap-3 text-xs text-g-400 leading-relaxed font-light">
+                      <span className="text-g-700 flex-shrink-0 mt-0.5">—</span>{b}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-2">
-                {p.bullets.map((b, bi) => (
-                  <li key={bi} className="flex gap-2.5 text-xs text-slate-400 leading-relaxed">
-                    <span className="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full bg-emerald-400/60" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
 
-        {/* expandable: LTR methodology */}
+        {/* expandables */}
         {[
           {
+            key: 'ltr',
             title: 'Learning to Rank — Methodology',
-            content: (
-              <div className="grid sm:grid-cols-2 gap-6 text-sm text-slate-400 leading-relaxed">
+            body: (
+              <div className="grid sm:grid-cols-2 gap-8 text-xs text-g-400 leading-relaxed font-light">
                 <div>
-                  <p className="font-semibold text-white mb-2">Why LTR over a binary classifier?</p>
-                  <p>A binary classifier answers &quot;approve or not?&quot;. LTR answers &quot;given this user, which loan product should we show first to maximise the probability of a good conversion?&quot; — it optimises the <em className="text-indigo-300">ordering</em> of offers, not just a threshold.</p>
-                  <div className="mt-4 bg-black/30 rounded-xl p-4 font-mono text-xs text-slate-300">
+                  <p className="text-g-200 font-medium mb-3">Why LTR over a binary classifier?</p>
+                  <p className="mb-4">A classifier answers &quot;approve or not?&quot;. LTR answers &quot;which offer should we show first?&quot; — optimising the <em className="text-g-200">ordering</em>, not just a threshold. Objective: NDCG / MAP over the offer list.</p>
+                  <div className="bg-g-950 border border-white/[0.06] p-4 font-mono text-[0.7rem] leading-loose text-g-300">
                     User signals  ─┐<br/>
-                    Loan features ─┼─► Feature Vector ─► LTR Model ─► Ranked Offers<br/>
-                    Context       ─┘       │<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Objective: NDCG / MAP
+                    Loan features ─┼─► Feature Vec ─► LTR Model ─► Ranked List<br/>
+                    Context       ─┘
                   </div>
                 </div>
                 <div>
-                  <p className="font-semibold text-white mb-2">Reject Inferencing integration</p>
-                  <p>Standard train set = only approved users → <span className="text-red-400 font-medium">survivor bias</span>. Rejection rates in personal loans can be 60–70%+, meaning a purely supervised model is trained on a tiny, unrepresentative slice of the market.</p>
-                  <div className="mt-4 bg-black/30 rounded-xl p-4 font-mono text-xs text-slate-300">
+                  <p className="text-g-200 font-medium mb-3">Reject inferencing pipeline</p>
+                  <p className="mb-4">Standard training sets contain only approved users → survivor bias. In personal loans rejection rates can be 60–70%+, making purely supervised models dangerously unrepresentative.</p>
+                  <div className="bg-g-950 border border-white/[0.06] p-4 font-mono text-[0.7rem] leading-loose text-g-300">
                     All Applicants<br/>
-                    ├── Approved ──► Observed label<br/>
-                    └── Rejected ──► No label ← PROBLEM<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reject Inferencing<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Unbiased model
+                    ├─ Approved ──► Observed labels<br/>
+                    └─ Rejected ──► Fuzzy / EM pseudo-labels<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Unbiased full model
                   </div>
                 </div>
               </div>
             ),
           },
           {
-            title: 'Pay in 3 — Cold-Start Clustering Architecture',
-            content: (
-              <div className="bg-black/30 rounded-xl p-5 font-mono text-xs text-slate-300 leading-loose overflow-x-auto">
-                {'          NEW USERS (no repayment history)\n                      │\n       ┌──────────────┼──────────────┐\n       │              │              │\n Behavioural     Demographic    Bureau Proxy\n  Signals          Signals        Signals\n(txn velocity,   (age, city,   (thin file,\n device price,  income proxy)  enquiry cnt)\n  app usage)\n       │              │              │\n       └──────────────┴──────────────┘\n                      │\n          Unsupervised Clustering\n         (K-Means / DBSCAN / GMM)\n                      │\n          ┌───────────┴───────────┐\n     Cluster A    Cluster B   Cluster C\n     Low Risk     Med Risk    High Risk\n          │\n   Monitor repayment signal\n          │\n   Enough labels? ─► Bootstrap Supervised Model\n                      └─► Retire clusters → full ML'}
+            key: 'cold',
+            title: 'Pay in 3 — Cold-Start Architecture',
+            body: (
+              <div className="bg-g-950 border border-white/[0.06] p-5 font-mono text-[0.7rem] text-g-300 leading-loose overflow-x-auto">
+                {`NEW USERS (no repayment history)
+          │
+  ┌───────┴───────┐───────────┐
+  Behavioural  Demographic  Bureau Proxy
+  Signals      Signals      Signals
+  (velocity,   (age, city,  (thin file,
+  device,      income)      enquiries)
+  app usage)
+          │
+  Unsupervised Clustering (K-Means / GMM)
+          │
+  ┌───────┴───────┐───────────┐
+  Low Risk    Med Risk    High Risk
+          │
+  Monitor repayment signal
+          │
+  Enough labels? → Bootstrap Supervised Model → Retire clusters`}
               </div>
             ),
           },
         ].map(item => (
-          <motion.div
-            key={item.title}
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="mb-3 glass rounded-2xl overflow-hidden"
-          >
-            <button
-              className="w-full flex items-center justify-between px-6 py-4 text-sm font-semibold text-slate-300 hover:text-white transition-colors"
-              onClick={() => toggle(item.title)}
-            >
-              <span>▸  {item.title}</span>
-              <motion.div animate={{ rotate: expanded === item.title ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                <ChevronDown size={16} />
-              </motion.div>
+          <div key={item.key} className="border-b border-white/[0.06] last:border-0">
+            <button onClick={() => toggle(item.key)}
+              className="w-full flex items-center justify-between py-4 text-xs font-mono text-g-400 hover:text-g-200 uppercase tracking-widest2 transition-colors">
+              <span>{item.title}</span>
+              <motion.span animate={{ rotate: open === item.key ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                <ChevronDown size={14} />
+              </motion.span>
             </button>
             <AnimatePresence>
-              {expanded === item.title && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-6 pb-6 border-t border-white/[0.06] pt-4">
-                    {item.content}
-                  </div>
+              {open === item.key && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
+                  <div className="pb-6">{item.body}</div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

@@ -1,129 +1,79 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
 import { navLinks, profile } from '@/data/portfolio'
 
 export default function Nav() {
-  const [scrolled, setScrolled]   = useState(false)
-  const [active,   setActive]     = useState('')
-  const [open,     setOpen]       = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [active,   setActive]   = useState('')
+  const [open,     setOpen]     = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 40)
-      const sections = navLinks.map(l => l.href.replace('#', ''))
-      for (const id of [...sections].reverse()) {
+      setScrolled(window.scrollY > 60)
+      const ids = navLinks.map(l => l.href.replace('#', ''))
+      for (const id of [...ids].reverse()) {
         const el = document.getElementById(id)
-        if (el && window.scrollY >= el.offsetTop - 120) {
-          setActive(id)
-          break
-        }
+        if (el && window.scrollY >= el.offsetTop - 140) { setActive(id); break }
       }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const scrollTo = (href: string) => {
+  const go = (href: string) => {
     setOpen(false)
-    const el = document.querySelector(href)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
     <motion.header
-      initial={{ y: -64, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[#0a0e1a]/80 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_30px_rgba(0,0,0,0.4)]'
-          : 'bg-transparent'
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? 'border-b border-white/[0.06]' : ''
       }`}
+      style={{ background: scrolled ? 'rgba(0,0,0,0.88)' : 'transparent', backdropFilter: scrolled ? 'blur(20px)' : 'none' }}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <button
-          onClick={() => scrollTo('#hero')}
-          className="flex items-center gap-3 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-sm shadow-glow-indigo">
-            YVG
-          </div>
-          <div className="hidden sm:block">
-            <div className="text-sm font-bold text-white leading-none">{profile.name}</div>
-            <div className="text-xs text-emerald-400 font-semibold mt-0.5">{profile.currentCompany}</div>
-          </div>
+      <div className="max-w-6xl mx-auto px-8 h-14 flex items-center justify-between">
+        <button onClick={() => go('#hero')} className="font-mono text-sm text-g-400 hover:text-apple transition-colors tracking-widest2 uppercase">
+          {profile.initials}
         </button>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {navLinks.map(link => {
-            const id = link.href.replace('#', '')
-            const isActive = active === id
+        {/* desktop */}
+        <nav className="hidden md:flex items-center gap-8">
+          {navLinks.map(l => {
+            const id = l.href.replace('#', '')
             return (
-              <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className={`relative px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                  isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+              <button key={l.href} onClick={() => go(l.href)}
+                className={`text-xs tracking-widest2 uppercase font-mono transition-colors duration-200 ${
+                  active === id ? 'text-apple' : 'text-g-400 hover:text-g-200'
                 }`}
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-pill"
-                    className="absolute inset-0 bg-white/[0.08] rounded-lg border border-white/[0.08]"
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
-                  />
-                )}
-                <span className="relative">{link.label}</span>
+                {l.label}
               </button>
             )
           })}
-          <a
-            href="mailto:yvg1799@gmail.com"
-            className="ml-3 px-4 py-1.5 text-sm font-semibold rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:opacity-90 transition-opacity"
-          >
-            Contact
-          </a>
         </nav>
 
-        {/* Mobile burger */}
-        <button
-          className="md:hidden text-slate-400 hover:text-white p-1"
-          onClick={() => setOpen(o => !o)}
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
+        {/* mobile */}
+        <button onClick={() => setOpen(o => !o)} className="md:hidden font-mono text-xs text-g-400 uppercase tracking-widest2">
+          {open ? 'close' : 'menu'}
         </button>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#0a0e1a]/95 backdrop-blur-xl border-b border-white/[0.06] overflow-hidden"
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }} className="md:hidden border-t border-white/[0.06] overflow-hidden"
+            style={{ background: 'rgba(0,0,0,0.95)', backdropFilter: 'blur(20px)' }}
           >
-            <div className="px-6 py-4 flex flex-col gap-1">
-              {navLinks.map(link => (
-                <button
-                  key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className="text-left px-3 py-2.5 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors"
-                >
-                  {link.label}
+            <div className="px-8 py-6 flex flex-col gap-4">
+              {navLinks.map(l => (
+                <button key={l.href} onClick={() => go(l.href)}
+                  className="text-left font-mono text-xs text-g-300 hover:text-apple uppercase tracking-widest2 transition-colors">
+                  {l.label}
                 </button>
               ))}
-              <a
-                href="mailto:yvg1799@gmail.com"
-                className="mt-2 px-4 py-2.5 text-sm font-semibold rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-center"
-              >
-                Contact
-              </a>
             </div>
           </motion.div>
         )}
