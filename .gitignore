@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+env/
+
+# Streamlit
+.streamlit/
+
+# Node / Next.js
+portfolio-web/node_modules/
+portfolio-web/.next/
+portfolio-web/.vercel/
+portfolio-web/out/
+portfolio-web/.env
+portfolio-web/.env.local
+portfolio-web/.env.production
+portfolio-web/npm-debug.log*
+portfolio-web/yarn-debug.log*
+portfolio-web/yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
