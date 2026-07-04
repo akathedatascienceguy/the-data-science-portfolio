@@ -109,7 +109,7 @@ export default function Hero() {
           className="eyebrow mb-8 flex items-center justify-center gap-3"
         >
           <span className="live-dot" />
-          <span>Founding Data Scientist &nbsp;·&nbsp; SuperMoney &nbsp;·&nbsp; New Delhi</span>
+          <span>Founding Data Scientist &nbsp;·&nbsp; SuperMoney &nbsp;·&nbsp; Bengaluru</span>
         </motion.div>
 
         {/* name — word by word, never breaks mid-word */}

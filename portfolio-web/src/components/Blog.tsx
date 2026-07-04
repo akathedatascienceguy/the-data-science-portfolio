@@ -23,7 +23,7 @@ export default function Blog() {
       <div ref={ref}>
         <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}>
           <div className="flex items-baseline gap-4 mb-2">
-            <span className="font-mono text-[0.62rem] text-g-600 tracking-widest2 uppercase">05</span>
+            <span className="font-mono text-[0.62rem] text-g-600 tracking-widest2 uppercase">06</span>
             <h2 className="text-3xl font-light text-apple tracking-tight">Writing</h2>
           </div>
           <p className="font-mono text-xs text-g-500 uppercase tracking-widest2 mb-12">

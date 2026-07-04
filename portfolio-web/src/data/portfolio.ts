@@ -3,7 +3,7 @@ export const profile = {
   initials: 'YVG',
   title: 'Founding Data Scientist',
   email: 'yvg1799@gmail.com',
-  location: 'New Delhi, India',
+  location: 'Bengaluru, India',
   currentCompany: 'SuperMoney',
   bio: '5+ years designing and deploying production ML & DL systems in FinTech. Currently founding the data science function at SuperMoney — replacing rule-based systems with modern ML, driving ₹60 Cr/month incremental delta (target ₹300 Cr by Dec \'26). Specialises in LSTM / Transformer sequence models, Graph Neural Networks, reject inferencing, and learning-to-rank. Consistently maintains portfolio delinquency under 1%.',
 }
@@ -218,6 +218,12 @@ export const achievements = [
 
 export const blogArticles = [
   {
+    icon: '🚦',
+    title: 'Unsnarling Bengaluru — Traffic as a Data Science Problem',
+    desc: 'Bengaluru loses ~243 crore rupees daily to gridlock. This piece models the city\'s traffic as a dynamic graph — intersections as nodes, roads as edges weighted by real-time congestion. Applies reinforcement learning for adaptive signal control, spatiotemporal demand forecasting for peak-hour routing, and anomaly detection to flag accident cascades before they propagate.',
+    tags: [['Graph ML', 'cyan'], ['RL / Signal Control', 'amber'], ['Urban Analytics', 'green']],
+  },
+  {
     icon: '🛢️',
     title: 'Strait of Hormuz — Risk Modelling & Economic Impact',
     desc: 'Quantitative risk analysis of the world\'s most critical oil chokepoint. Supply-disruption scenarios using shipping data, oil flow volumes, and macro-economic multipliers. Framed through uncertainty quantification, scenario trees, and sensitivity analysis.',
@@ -255,6 +261,7 @@ export const navLinks = [
   { label: 'SeLMoRe',      href: '#selmore' },
   { label: 'Underwriting', href: '#underwriting' },
   { label: 'AI Butler',    href: '#aibutler' },
-  { label: 'Writing',      href: '#blog' },
+  { label: 'Dukaan AI',   href: '#dukaanai' },
+  { label: 'Writing',     href: '#blog' },
   { label: 'Skills',       href: '#skills' },
 ]

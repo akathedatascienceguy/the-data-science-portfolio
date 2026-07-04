@@ -6,6 +6,7 @@ import SuperMoney   from '@/components/SuperMoney'
 import SeLMoRe      from '@/components/SeLMoRe'
 import Underwriting from '@/components/Underwriting'
 import AIButler     from '@/components/AIButler'
+import DukaanAI    from '@/components/DukaanAI'
 import Blog         from '@/components/Blog'
 import Skills       from '@/components/Skills'
 import Education    from '@/components/Education'
@@ -31,6 +32,8 @@ export default function Home() {
       <Underwriting />
       <Rule />
       <AIButler />
+      <Rule />
+      <DukaanAI />
       <Rule />
       <Blog />
       <Rule />
